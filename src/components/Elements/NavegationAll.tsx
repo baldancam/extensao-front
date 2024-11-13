@@ -57,7 +57,7 @@ const NavegationAll = () => {
     const urlStage = location.pathname.split("/")[2];
     if (urlStage === undefined) {
       setPagination(route.namePage[0]);
-    } else if (urlStage === "cardapio") {
+    } else if (urlStage === "cardapio" || "noticia") {
       setPagination(route.namePage[1]);
     } else {
       setPagination(route.namePage[2]);

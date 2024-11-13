@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { AuthContext } from "../../context/Auth";
 import { NoticiaResponse } from "../../api/InterfaceApi";
-
+import { putNoticia } from "../../api/api";
 
 interface useUpdateNoticia {
   idNoticia: string ;

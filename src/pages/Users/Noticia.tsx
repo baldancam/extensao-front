@@ -13,6 +13,8 @@ const Noticia = () => {
           titulo={item.titulo}
           dataPublicacao={item.dataPublicacao}
           imagemUrl={item.imagemUrl}
+          idNoticia=""
+
 
         />
       ))}

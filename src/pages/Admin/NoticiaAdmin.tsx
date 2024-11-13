@@ -9,7 +9,7 @@ const NoticiaAdmin = () => {
 
   return (
     <>
-    <NoticiaCreate/>
+    {!id && <NoticiaCreate/>}
       {!isLoading &&
         data &&
         Object.values(data)

@@ -9,21 +9,23 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AuthContext } from "../../context/Auth"; // Ajuste o caminho conforme necessário
-import axios from "axios";
+import { usePostNoticia } from "../../hooks/Response/PostCardapio";
 
-// URL base da API
-const baseUrl = "http://44.223.188.239:8080";
 
 // Esquema de validação com yup
 const schema = yup.object().shape({
   titulo: yup.string().required("O título é obrigatório"),
   conteudo: yup.string().required("O conteúdo é obrigatório"),
-  imagemUrl: yup.mixed().required("A imagem é obrigatória"),
+  imagemUrl: yup
+  .mixed<any>()
+  .nullable()
+  .required("A imagem é obrigatória"),
 });
 
 const NoticiaCreate = () => {
   const { token, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const {mutate} = usePostNoticia()
   const [createNoticia, setCreateNoticia] = useState({
     titulo: "",
     conteudo: "",
@@ -43,7 +45,7 @@ const NoticiaCreate = () => {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSend = async (data) => {
+  const handleSend = async (data:any) => {
     if (!token) {
       console.error("Token não disponível");
       return;
@@ -52,35 +54,17 @@ const NoticiaCreate = () => {
     const formData = new FormData();
     formData.append("titulo", data.titulo);
     formData.append("conteudo", data.conteudo);
-  
     if (createNoticia.imagemUrl) {
       formData.append("file", createNoticia.imagemUrl);
     }
+    formData.append("usuarioId", String(user.id));
+    mutate(formData)
   
-    // Adicione o campo usuarioId manualmente
-    formData.append("usuarioId", user.id);
-  
-    try {
-      const response = await axios.post(`${baseUrl}/noticias`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      if (response.status === 200) {
-        console.log("Notícia enviada com sucesso");
-        setOpen(false);
-      } else {
-        console.error("Erro ao enviar notícia");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar notícia:", error);
-    }
   };
   
   
 
-  const handleChange = (event) => {
+  const handleChange = (event:any) => {
     const file = event.target.files[0];
     if (file) {
       setValue("imagemUrl", file, { shouldValidate: true });
@@ -99,7 +83,7 @@ const NoticiaCreate = () => {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button sx={{marginBottom:'10px'}} variant="outlined" onClick={handleClickOpen}>
         Criar Notícia
       </Button>
       <Dialog
@@ -180,9 +164,7 @@ const NoticiaCreate = () => {
                 name="imagemUrl"
               />
             </Button>
-            {errors.imagemUrl && (
-              <Typography color="error">{errors.imagemUrl.message}</Typography>
-            )}
+
           </Box>
         </DialogContent>
         <DialogActions>

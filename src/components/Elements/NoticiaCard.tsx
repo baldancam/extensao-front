@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/Auth";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useNavigate, useParams } from "react-router-dom";
 import NoticiaEdit from "./NoticiaEdit";
+import NoticiaDelete from "./NoticiaDelete";
 
 interface NoticiaCard {
   titulo: string;
@@ -22,16 +23,18 @@ const NoticiaCard = ({
   idNoticia,
 }: NoticiaCard) => {
   const navigate = useNavigate();
+  const [abrirDeletar, setAbrirDeletar] = useState(false);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const Admin = user.role == "ADMIN";
 
-
-
   const showNoticia = () => {
     navigate(`/admin/noticia/${idNoticia}`);
-    
   };
+
+  const deleteNoticia = () => {
+    setAbrirDeletar(true)
+  }
 
   return (
     <>
@@ -62,11 +65,13 @@ const NoticiaCard = ({
         {Admin && !id && (
           <div className="flex flex-row bg-slate-100 rounded-lg p-2 m-2 absolute right-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <EditNoteIcon className="cursor-pointer" onClick={showNoticia} />
-            <DeleteIcon className="cursor-pointer" />
+            <DeleteIcon className="cursor-pointer" onClick={deleteNoticia}/>
           </div>
         )}
       </div>
-      
+
+      <NoticiaDelete abrirDelete={abrirDeletar} setAbrirDelete={setAbrirDeletar} idNoticia={idNoticia}/>
+
       {id && (
         <NoticiaEdit
           conteudo={conteudo}
