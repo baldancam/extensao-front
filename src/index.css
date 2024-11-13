@@ -1,0 +1,41 @@
+body,
+h1,
+h2,
+h6,
+ul,
+li,
+p,
+dd,
+dt,
+dl {
+  margin: 0px;
+  padding: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+span,
+p {
+  font-family: "Inter", sans-serif !important;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
